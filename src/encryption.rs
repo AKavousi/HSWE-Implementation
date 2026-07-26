@@ -1,15 +1,12 @@
 use ark_bls12_381::{Bls12_381, Fr};
-use ark_ec::{
-    AffineRepr, CurveGroup, PrimeGroup,
-    pairing::Pairing,
-};
+use ark_ec::{AffineRepr, CurveGroup, PrimeGroup, pairing::Pairing};
 use ark_ff::{Field, PrimeField, UniformRand, Zero};
 use rand::rngs::OsRng;
 
 use crate::{
     ciphertext::Ciphertext,
     error::{HsweError, Result},
-    keys::{hash_tag, HswePublicKey},
+    keys::{HswePublicKey, hash_tag},
     params::HsweParameters,
     tag::Tag,
 };

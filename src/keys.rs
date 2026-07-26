@@ -19,7 +19,7 @@ const HSWE_TAG_DST: &[u8] = b"HSWE-V01_BLS12381G1_XMD:SHA-256_SSWU_RO_";
 type G1Hasher =
     MapToCurveBasedHasher<G1Projective, DefaultFieldHasher<Sha256, 128>, WBMap<g1::Config>>;
 
-fn hash_tag(tag: &Tag) -> G1Affine {
+pub(crate) fn hash_tag(tag: &Tag) -> G1Affine {
     let hasher =
         G1Hasher::new(HSWE_TAG_DST).expect("the fixed HSWE hash-to-curve configuration is valid");
 
