@@ -1,14 +1,11 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+//! HSWE v0.1 research prototype.
+//!
+//! This crate implements the pairing-based Homomorphic Signature-based
+//! Witness Encryption construction described in the repository documentation.
+//! It is a research artifact and is not suitable for production use.
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+pub mod ciphertext;
+pub mod error;
+pub mod params;
+pub mod serialization;
+pub mod tag;
