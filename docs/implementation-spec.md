@@ -1,0 +1,1 @@
+# HSWE v0.1 Machine-Oriented Implementation Specification
