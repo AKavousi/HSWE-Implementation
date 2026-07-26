@@ -1,29 +1,51 @@
-# Project Name
+# HSWE Implementation
 
-## Paper
+A research prototype implementing the pairing-based Homomorphic Signature-based Witness Encryption (HSWE) construction from:
 
-Implementation accompanying the paper:
+> *Homomorphic Signature-based Witness Encryption and Applications*
 
-> "Paper Title"
+## v0.1 Scope
 
-## Scope
+The initial implementation targets:
 
-This repository contains a Rust implementation developed for research purposes.
+- BLS12-381 Type-III pairings
+- A single signing authority
+- Canonical epoch tags
+- BLS-style tag signatures as decryption witnesses
+- Bounded non-negative integer messages
+- Same-tag additive ciphertext aggregation
+- Lookup-table-based bounded discrete-log recovery
+- Correctness testing and reproducible benchmarking
 
-Current goals include:
+## Out of Scope
 
-- Rust implementation
-- Design documentation
-- Experimental testing
-- Benchmarking
+v0.1 does not implement:
+
+- Threshold BLS signatures
+- Cross-tag aggregation
+- The stateful privacy-preserving HSWE wrapper
+- Lattice-based HSWE constructions
+- Networking, blockchain integration, or smart contracts
+- Production deployment features
+
+## Documentation
+
+- `docs/implementation-spec.md` — Machine-oriented protocol specification
+- `docs/module-api-design.md` — Module and API design
+- `docs/milestone-plan.md` — Step-by-step implementation plan
 
 ## Repository Structure
 
-- `src/` — Rust source code
-- `docs/` — Design documents and technical notes
+- `src/` — Rust library source code
+- `docs/` — Protocol, design, and reproducibility documentation
+- `tests/` — Integration tests
+- `benches/` — Performance benchmarks
+- `results/` — Generated benchmark data and figures
+
+## Status
+
+The project is currently completing the v0.1 design and environment-validation milestones.
 
 ## Disclaimer
 
-**This project is intended for research and educational purposes only.**
-
-**It is not suitable for production use.**
+This is a research and educational prototype. It has not undergone an independent security audit and must not be used in production systems.

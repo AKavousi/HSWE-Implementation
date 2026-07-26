@@ -1,5 +1,5 @@
 [package]
-name = "HSWE-Implementation"
+name = "hswe-implementation"
 version = "0.1.0"
 edition = "2024"
 
