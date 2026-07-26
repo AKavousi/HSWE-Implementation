@@ -1,14 +1,14 @@
-# My Project
+# Project Name
 
 ## Paper
 
 Implementation accompanying the paper:
 
-> "Title of Your Paper"
+> "Paper Title"
 
 ## Scope
 
-This repository contains research code and experiments related to the paper.
+This repository contains a Rust implementation developed for research purposes.
 
 Current goals include:
 
@@ -17,8 +17,13 @@ Current goals include:
 - Experimental testing
 - Benchmarking
 
+## Repository Structure
+
+- `src/` — Rust source code
+- `docs/` — Design documents and technical notes
+
 ## Disclaimer
 
-**This project is for research and educational purposes only.**
+**This project is intended for research and educational purposes only.**
 
-**It is NOT intended for production use.**
+**It is not suitable for production use.**

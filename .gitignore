@@ -1,1 +1,32 @@
-/target
+# Rust build output
+target/
+
+# Cargo lock
+# Remove this line if you later decide this is an application instead of a library.
+Cargo.lock
+
+# VS Code
+.vscode/
+
+# JetBrains IDEs
+.idea/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Local benchmark output
+benchmarks/output/
+benchmark-results/
+*.bench
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
