@@ -7,6 +7,6 @@
 pub mod ciphertext;
 pub mod error;
 pub mod keys;
+pub mod lookup;
 pub mod params;
-
 pub mod tag;
