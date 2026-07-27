@@ -13,3 +13,6 @@ pub mod keys;
 pub mod lookup;
 pub mod params;
 pub mod tag;
+
+pub mod privacy;
+pub mod sharing;

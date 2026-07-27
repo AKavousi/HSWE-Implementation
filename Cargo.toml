@@ -12,3 +12,10 @@ rand = "=0.8.5"
 sha2 = "=0.10.9"
 thiserror = "=2.0.18"
 zeroize = "=1.8.2"
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bench]]
+name = "same_tag"
+harness = false
