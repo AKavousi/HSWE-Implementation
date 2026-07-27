@@ -23,8 +23,7 @@ fn private_same_tag_tally_recovers_only_the_total() {
     let tag = Tag::epoch("private-tally-test", 1).unwrap();
     let signature = secret_key.sign(&tag);
 
-    let lookup_table =
-        TargetLookupTable::new(parameters.parameter_id(), 100).unwrap();
+    let lookup_table = TargetLookupTable::new(parameters.parameter_id(), 100).unwrap();
 
     let messages = [4u64, 7u64, 12u64];
     let expected_total: u64 = messages.iter().sum();
@@ -33,8 +32,7 @@ fn private_same_tag_tally_recovers_only_the_total() {
     let mut aggregate_blind = Fr::zero();
 
     for message in messages {
-        let ciphertext =
-            encrypt(&parameters, &public_key, tag.clone(), message).unwrap();
+        let ciphertext = encrypt(&parameters, &public_key, tag.clone(), message).unwrap();
 
         let blind = sample_blind();
         aggregate_blind += blind;
@@ -61,11 +59,9 @@ fn private_same_tag_tally_recovers_only_the_total() {
         blinded_ciphertexts.push(blinded);
     }
 
-    let blinded_aggregate =
-        aggregate_same_tag(&parameters, &blinded_ciphertexts).unwrap();
+    let blinded_aggregate = aggregate_same_tag(&parameters, &blinded_ciphertexts).unwrap();
 
-    let unblinded_aggregate =
-        remove_aggregate_blind(&blinded_aggregate, aggregate_blind);
+    let unblinded_aggregate = remove_aggregate_blind(&blinded_aggregate, aggregate_blind);
 
     let recovered_total = decrypt_same_tag_aggregate(
         &parameters,

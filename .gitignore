@@ -26,3 +26,9 @@ benchmark-results/
 *.temp
 *.bak
 *.swp
+
+
+# Generated benchmark artefacts
+/target/
+/lattice_binary_results.csv
+/lattice_binary_scaling.png

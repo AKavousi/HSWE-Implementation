@@ -1,17 +1,12 @@
 use std::{
-    fs::{create_dir_all, File},
+    fs::{File, create_dir_all},
     io::Write,
     time::{Duration, Instant},
 };
 
 use hswe_implementation::{
-    aggregation::aggregate_cross_tag,
-    decryption::decrypt_cross_tag_aggregate,
-    encryption::encrypt,
-    keys::HsweSecretKey,
-    lookup::TargetLookupTable,
-    params::HsweParameters,
-    tag::Tag,
+    aggregation::aggregate_cross_tag, decryption::decrypt_cross_tag_aggregate, encryption::encrypt,
+    keys::HsweSecretKey, lookup::TargetLookupTable, params::HsweParameters, tag::Tag,
 };
 
 const SAMPLES: usize = 100;

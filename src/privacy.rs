@@ -1,11 +1,7 @@
-use ark_bls12_381::{g1, Bls12_381, Fr, G1Projective};
+use ark_bls12_381::{Bls12_381, Fr, G1Projective, g1};
 use ark_ec::{
-    AffineRepr, CurveGroup, PrimeGroup,
-    hashing::{
-        HashToCurve,
-        curve_maps::wb::WBMap,
-        map_to_curve_hasher::MapToCurveBasedHasher,
-    },
+    PrimeGroup,
+    hashing::{HashToCurve, curve_maps::wb::WBMap, map_to_curve_hasher::MapToCurveBasedHasher},
     pairing::Pairing,
 };
 use ark_ff::{Field, PrimeField, UniformRand, Zero, field_hashers::DefaultFieldHasher};
@@ -14,8 +10,7 @@ use sha2::Sha256;
 
 use crate::ciphertext::{Ciphertext, SameTagAggregate};
 
-const PRIVACY_GENERATOR_DST: &[u8] =
-    b"HSWE-V01_PRIVACY_GENERATOR_BLS12381G1_XMD:SHA-256_SSWU_RO_";
+const PRIVACY_GENERATOR_DST: &[u8] = b"HSWE-V01_PRIVACY_GENERATOR_BLS12381G1_XMD:SHA-256_SSWU_RO_";
 
 type G1Hasher =
     MapToCurveBasedHasher<G1Projective, DefaultFieldHasher<Sha256, 128>, WBMap<g1::Config>>;
@@ -36,8 +31,7 @@ pub fn sample_blind() -> Fr {
 /// Returns a fixed, domain-separated target-group element used only for
 /// privacy blinding.
 pub fn privacy_generator() -> <Bls12_381 as Pairing>::TargetField {
-    let hasher =
-        G1Hasher::new(PRIVACY_GENERATOR_DST).expect("fixed privacy DST is valid");
+    let hasher = G1Hasher::new(PRIVACY_GENERATOR_DST).expect("fixed privacy DST is valid");
 
     let h_g1 = hasher
         .hash(b"HSWE privacy blinding generator")

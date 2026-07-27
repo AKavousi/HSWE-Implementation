@@ -1,5 +1,5 @@
 use std::{
-    fs::{create_dir_all, File},
+    fs::{File, create_dir_all},
     io::Write,
     time::{Duration, Instant},
 };
@@ -15,7 +15,7 @@ use hswe_implementation::{
     lookup::TargetLookupTable,
     params::HsweParameters,
     privacy::{blind_ciphertext, remove_aggregate_blind, sample_blind},
-    sharing::{reconstruct_secret, split_secret, ScalarShare},
+    sharing::{ScalarShare, reconstruct_secret, split_secret},
     tag::Tag,
 };
 
@@ -72,7 +72,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let blind_start = Instant::now();
 
             let mut blinded_ciphertexts = Vec::with_capacity(batch_size);
-            let mut committee_sums = vec![Fr::zero(); COMMITTEE_SIZE];
+            let mut committee_sums = [Fr::zero(); COMMITTEE_SIZE];
 
             for ciphertext in &ciphertexts {
                 let blind = sample_blind();
@@ -89,8 +89,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             let aggregate_start = Instant::now();
 
-            let blinded_aggregate =
-                aggregate_same_tag(&parameters, &blinded_ciphertexts)?;
+            let blinded_aggregate = aggregate_same_tag(&parameters, &blinded_ciphertexts)?;
 
             aggregate_times.push(aggregate_start.elapsed());
 
@@ -102,15 +101,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .map(|(i, &value)| ScalarShare::new((i + 1) as u64, value))
                 .collect::<Result<Vec<_>, _>>()?;
 
-            let aggregate_blind =
-                reconstruct_secret(&aggregate_shares[..THRESHOLD], THRESHOLD)?;
+            let aggregate_blind = reconstruct_secret(&aggregate_shares[..THRESHOLD], THRESHOLD)?;
 
             reconstruct_times.push(reconstruct_start.elapsed());
 
             let unblind_start = Instant::now();
 
-            let unblinded_aggregate =
-                remove_aggregate_blind(&blinded_aggregate, aggregate_blind);
+            let unblinded_aggregate = remove_aggregate_blind(&blinded_aggregate, aggregate_blind);
 
             unblind_times.push(unblind_start.elapsed());
 
@@ -134,8 +131,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let reconstruct_ms = mean_ms(&reconstruct_times);
         let unblind_ms = mean_ms(&unblind_times);
         let decrypt_ms = mean_ms(&decrypt_times);
-        let total_ms =
-            blind_each_ms + aggregate_ms + reconstruct_ms + unblind_ms + decrypt_ms;
+        let total_ms = blind_each_ms + aggregate_ms + reconstruct_ms + unblind_ms + decrypt_ms;
 
         writeln!(
             csv,

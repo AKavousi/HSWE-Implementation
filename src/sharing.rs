@@ -86,10 +86,7 @@ pub fn split_secret(
     Ok(shares)
 }
 
-pub fn reconstruct_secret(
-    shares: &[ScalarShare],
-    threshold: usize,
-) -> Result<Fr, SharingError> {
+pub fn reconstruct_secret(shares: &[ScalarShare], threshold: usize) -> Result<Fr, SharingError> {
     if threshold == 0 {
         return Err(SharingError::ZeroThreshold);
     }

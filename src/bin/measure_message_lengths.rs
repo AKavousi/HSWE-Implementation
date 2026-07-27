@@ -1,16 +1,12 @@
 use std::{
-    fs::{create_dir_all, File},
+    fs::{File, create_dir_all},
     io::Write,
     time::{Duration, Instant},
 };
 
 use hswe_implementation::{
-    decryption::decrypt,
-    encryption::encrypt,
-    keys::HsweSecretKey,
-    lookup::TargetLookupTable,
-    params::HsweParameters,
-    tag::Tag,
+    decryption::decrypt, encryption::encrypt, keys::HsweSecretKey, lookup::TargetLookupTable,
+    params::HsweParameters, tag::Tag,
 };
 
 const SAMPLES: usize = 1_000;
@@ -25,10 +21,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     create_dir_all("results")?;
     let mut csv = File::create("results/message_length_times.csv")?;
 
-    writeln!(
-        csv,
-        "message_bits,encryption_mean_ms,decryption_mean_ms"
-    )?;
+    writeln!(csv, "message_bits,encryption_mean_ms,decryption_mean_ms")?;
 
     // IMPORTANT:
     // Adjust this constructor if your HsweParameters API uses another name
@@ -64,12 +57,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             let encryption_start = Instant::now();
 
-            let ciphertext = encrypt(
-                &parameters,
-                &public_key,
-                tag.clone(),
-                message,
-            )?;
+            let ciphertext = encrypt(&parameters, &public_key, tag.clone(), message)?;
 
             encryption_times.push(encryption_start.elapsed());
 
@@ -94,10 +82,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let encryption_ms = mean_ms(&encryption_times);
         let decryption_ms = mean_ms(&decryption_times);
 
-        writeln!(
-            csv,
-            "{bits},{encryption_ms:.6},{decryption_ms:.6}"
-        )?;
+        writeln!(csv, "{bits},{encryption_ms:.6},{decryption_ms:.6}")?;
 
         println!(
             "{bits:2} bits | encryption: {encryption_ms:8.4} ms | \

@@ -10,9 +10,9 @@ pub mod decryption;
 pub mod encryption;
 pub mod error;
 pub mod keys;
+pub mod lattice;
 pub mod lookup;
 pub mod params;
-pub mod tag;
-
 pub mod privacy;
 pub mod sharing;
+pub mod tag;
