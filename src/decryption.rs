@@ -3,7 +3,7 @@ use ark_ec::pairing::Pairing;
 use ark_ff::{Field, One};
 
 use crate::{
-    ciphertext::{Ciphertext, SameTagAggregate, TagSignature},
+    ciphertext::{Ciphertext, TagSignature},
     error::{HsweError, Result},
     keys::HswePublicKey,
     lookup::TargetLookupTable,
@@ -11,6 +11,9 @@ use crate::{
 };
 
 /// Decrypts one ciphertext using a valid signature for its embedded tag.
+///
+/// The signature acts as the witness/decryption key. The lookup table must
+/// have been built for the same parameter configuration.
 pub fn decrypt(
     parameters: &HsweParameters,
     public_key: &HswePublicKey,
@@ -41,10 +44,12 @@ pub fn decrypt(
 }
 
 /// Decrypts a same-tag aggregate using one tag signature.
+///
+/// The result is the sum of all messages represented by the aggregate.
 pub fn decrypt_same_tag_aggregate(
     parameters: &HsweParameters,
     public_key: &HswePublicKey,
-    aggregate: &SameTagAggregate,
+    aggregate: &crate::ciphertext::SameTagAggregate,
     signature: &TagSignature,
     lookup_table: &TargetLookupTable,
 ) -> Result<u64> {
