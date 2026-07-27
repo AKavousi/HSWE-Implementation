@@ -51,3 +51,44 @@ pub fn aggregate_same_tag(
         v,
     ))
 }
+
+/// Homomorphically aggregates ciphertexts encrypted under potentially
+/// different tags but under one parameter configuration.
+///
+/// Each tag and its corresponding `U` component are retained so that the
+/// aggregate can later be decrypted with the matching tag signatures.
+pub fn aggregate_cross_tag(
+    parameters: &HsweParameters,
+    ciphertexts: &[Ciphertext],
+) -> Result<crate::ciphertext::CrossTagAggregate> {
+    if ciphertexts.is_empty() {
+        return Err(HsweError::EmptyAggregate);
+    }
+
+    let mut tagged_u = Vec::with_capacity(ciphertexts.len());
+    let mut v = <Bls12_381 as ark_ec::pairing::Pairing>::TargetField::one();
+    let mut item_count = 0u64;
+
+    for ciphertext in ciphertexts {
+        if ciphertext.parameter_id() != parameters.parameter_id() {
+            return Err(HsweError::IncompatibleParameters);
+        }
+
+        item_count = item_count
+            .checked_add(1)
+            .ok_or(HsweError::ItemCountOverflow)?;
+
+        tagged_u.push(crate::ciphertext::TaggedU::new(
+            ciphertext.tag().clone(),
+            ciphertext.u(),
+        ));
+        v *= ciphertext.v();
+    }
+
+    Ok(crate::ciphertext::CrossTagAggregate::new(
+        parameters.parameter_id(),
+        item_count,
+        tagged_u,
+        v,
+    ))
+}

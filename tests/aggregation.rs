@@ -73,3 +73,47 @@ fn same_tag_aggregation_rejects_parameter_mismatch() {
         Err(HsweError::IncompatibleParameters)
     );
 }
+
+#[test]
+fn cross_tag_aggregate_decrypts_to_the_message_sum() {
+    use hswe_implementation::{
+        aggregation::aggregate_cross_tag, decryption::decrypt_cross_tag_aggregate,
+        lookup::TargetLookupTable,
+    };
+
+    let parameters = HsweParameters::new(10, 100).expect("parameters must be valid");
+    let secret_key = HsweSecretKey::generate(&parameters);
+    let public_key = secret_key.public_key();
+
+    let first_tag = test_tag(42);
+    let second_tag = test_tag(43);
+    let third_tag = test_tag(44);
+
+    let ciphertexts = vec![
+        encrypt(&parameters, &public_key, first_tag.clone(), 2).expect("must encrypt"),
+        encrypt(&parameters, &public_key, second_tag.clone(), 3).expect("must encrypt"),
+        encrypt(&parameters, &public_key, third_tag.clone(), 5).expect("must encrypt"),
+    ];
+
+    let aggregate = aggregate_cross_tag(&parameters, &ciphertexts).expect("must aggregate");
+
+    let signatures = vec![
+        secret_key.sign(&first_tag),
+        secret_key.sign(&second_tag),
+        secret_key.sign(&third_tag),
+    ];
+
+    let lookup_table =
+        TargetLookupTable::new(parameters.parameter_id(), 10).expect("table must build");
+
+    assert_eq!(
+        decrypt_cross_tag_aggregate(
+            &parameters,
+            &public_key,
+            &aggregate,
+            &signatures,
+            &lookup_table,
+        ),
+        Ok(10),
+    );
+}

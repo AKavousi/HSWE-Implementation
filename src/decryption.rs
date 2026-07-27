@@ -1,6 +1,6 @@
 use ark_bls12_381::Bls12_381;
 use ark_ec::pairing::Pairing;
-use ark_ff::Field;
+use ark_ff::{Field, One};
 
 use crate::{
     ciphertext::{Ciphertext, SameTagAggregate, TagSignature},
@@ -66,6 +66,51 @@ pub fn decrypt_same_tag_aggregate(
     let mask = Bls12_381::pairing(signature.point(), aggregate.u()).0;
     let inverse_mask = mask.inverse().ok_or(HsweError::InvalidAggregate)?;
     let recovered_target = *aggregate.v() * inverse_mask;
+
+    lookup_table.lookup(&recovered_target)
+}
+
+/// Decrypts a cross-tag aggregate.
+///
+/// `signatures` must be supplied in precisely the same order as the aggregate's
+/// retained `(tag, U)` entries.
+pub fn decrypt_cross_tag_aggregate(
+    parameters: &HsweParameters,
+    public_key: &HswePublicKey,
+    aggregate: &crate::ciphertext::CrossTagAggregate,
+    signatures: &[TagSignature],
+    lookup_table: &TargetLookupTable,
+) -> Result<u64> {
+    if aggregate.parameter_id() != parameters.parameter_id()
+        || public_key.parameter_id() != parameters.parameter_id()
+    {
+        return Err(HsweError::IncompatibleParameters);
+    }
+
+    if lookup_table.parameter_id() != parameters.parameter_id() {
+        return Err(HsweError::LookupTableMismatch);
+    }
+
+    if signatures.len() != aggregate.tagged_u().len() {
+        return Err(HsweError::InvalidSignature);
+    }
+
+    let mut masks = <Bls12_381 as Pairing>::TargetField::one();
+
+    for (tagged_u, signature) in aggregate.tagged_u().iter().zip(signatures) {
+        if signature.parameter_id() != parameters.parameter_id() {
+            return Err(HsweError::IncompatibleParameters);
+        }
+
+        if !public_key.verify(tagged_u.tag(), signature) {
+            return Err(HsweError::InvalidSignature);
+        }
+
+        masks *= Bls12_381::pairing(signature.point(), tagged_u.u()).0;
+    }
+
+    let inverse_masks = masks.inverse().ok_or(HsweError::InvalidAggregate)?;
+    let recovered_target = *aggregate.v() * inverse_masks;
 
     lookup_table.lookup(&recovered_target)
 }
