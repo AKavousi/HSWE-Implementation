@@ -9,7 +9,6 @@ The initial implementation targets:
 
 - BLS12-381 Type-III pairings
 - A single signing authority
-- BLS-style tag signatures as decryption witnesses
 - Bounded non-negative integer messages
 - Same-tag additive ciphertext aggregation
 - Cross-tag aggregation
