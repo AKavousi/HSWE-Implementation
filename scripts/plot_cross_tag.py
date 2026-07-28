@@ -9,21 +9,24 @@ OUTPUT_PATH = ROOT / "results" / "cross_tag_benchmark.png"
 
 df = pd.read_csv(CSV_PATH)
 
-plt.style.use("dark_background")
+# Use a light theme
+plt.style.use("default")
 
 fig, axes = plt.subplots(1, 2, figsize=(13, 5.2), dpi=200)
-fig.patch.set_facecolor("#222222")
+fig.patch.set_facecolor("white")
 
 for ax in axes:
-    ax.set_facecolor("#222222")
+    ax.set_facecolor("white")
     ax.grid(True, which="both", alpha=0.20, linewidth=0.8)
-    ax.tick_params(colors="#dddddd")
+    ax.tick_params(colors="black")
 
     for spine in ax.spines.values():
-        spine.set_color("#bbbbbb")
+        spine.set_color("black")
         spine.set_linewidth(1.0)
 
+# ------------------------------------------------------------------
 # (a) Cross-tag extraction vs sequential decryption
+# ------------------------------------------------------------------
 ax = axes[0]
 
 ax.plot(
@@ -52,19 +55,21 @@ ax.set_yscale("log")
 ax.set_xticks(df["tag_count"])
 ax.set_xticklabels(df["tag_count"])
 
-ax.set_title("Cross-tag decryption cost", color="#eeeeee", fontsize=13)
-ax.set_xlabel("# Distinct tags", color="#eeeeee")
-ax.set_ylabel("Time (ms)", color="#eeeeee")
+ax.set_title("Cross-tag decryption cost", color="black", fontsize=13)
+ax.set_xlabel("# Distinct tags", color="black")
+ax.set_ylabel("Time (ms)", color="black")
 
 ax.legend(
     loc="upper left",
     frameon=True,
-    facecolor="#303030",
-    edgecolor="#777777",
-    labelcolor="#eeeeee",
+    facecolor="white",
+    edgecolor="black",
+    labelcolor="black",
 )
 
+# ------------------------------------------------------------------
 # (b) Aggregation cost
+# ------------------------------------------------------------------
 ax = axes[1]
 
 ax.plot(
@@ -82,24 +87,27 @@ ax.set_yscale("log")
 ax.set_xticks(df["tag_count"])
 ax.set_xticklabels(df["tag_count"])
 
-ax.set_title("Cross-tag aggregation cost", color="#eeeeee", fontsize=13)
-ax.set_xlabel("# Distinct tags", color="#eeeeee")
-ax.set_ylabel("Time (ms)", color="#eeeeee")
+ax.set_title("Cross-tag aggregation cost", color="black", fontsize=13)
+ax.set_xlabel("# Distinct tags", color="black")
+ax.set_ylabel("Time (ms)", color="black")
 
 ax.legend(
     loc="upper left",
     frameon=True,
-    facecolor="#303030",
-    edgecolor="#777777",
-    labelcolor="#eeeeee",
+    facecolor="white",
+    edgecolor="black",
+    labelcolor="black",
 )
 
+# ------------------------------------------------------------------
+# Subfigure labels
+# ------------------------------------------------------------------
 fig.text(
     0.25,
     0.01,
     "(a) Linear cross-tag extraction",
     ha="center",
-    color="#eeeeee",
+    color="black",
     fontsize=11,
 )
 
@@ -108,7 +116,7 @@ fig.text(
     0.01,
     "(b) Homomorphic aggregation",
     ha="center",
-    color="#eeeeee",
+    color="black",
     fontsize=11,
 )
 
@@ -118,8 +126,9 @@ fig.savefig(
     OUTPUT_PATH,
     dpi=300,
     bbox_inches="tight",
-    facecolor=fig.get_facecolor(),
+    facecolor="white",
 )
 
 print(f"Saved plot to: {OUTPUT_PATH}")
+
 plt.show()
