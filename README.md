@@ -1,8 +1,6 @@
 # HSWE Implementation
 
-A research prototype implementing the Homomorphic Signature-based Witness Encryption (HSWE) constructions from:
-
-> *Homomorphic Signature-based Witness Encryption and Applications*
+A research prototype implementing the Homomorphic Signature-based Witness Encryption (HSWE) constructions: https://eprint.iacr.org/2025/443
 
 
 The implementation targets:
